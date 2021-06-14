@@ -169,7 +169,6 @@ class SerialCppVisitor(AbstractVisitor.AbstractVisitor):
         arg_str = arg_str.strip(", ")
         return arg_str
 
-
     def _writeTmpl(self, c, visit_str):
         """
         Wrapper to write tmpl to files desc.
