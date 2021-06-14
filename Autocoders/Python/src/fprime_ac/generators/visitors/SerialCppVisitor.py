@@ -104,8 +104,9 @@ class SerialCppVisitor(AbstractVisitor.AbstractVisitor):
 
     def _get_args_string(self, obj, prefix=""):
         """
-        Return a string of name args, comma separated
-        for use in templates that generate method or function calls.
+        Return a string of (type, name) args, comma separated
+        with a single element type for arrays
+        for use in templates that generate prototypes.
         """
         args = obj.get_members()
         arg_str = ""
@@ -142,6 +143,32 @@ class SerialCppVisitor(AbstractVisitor.AbstractVisitor):
             arg_list.append((name, mtype, size, format, comment, typeinfo))
 
         return arg_list
+
+    def _get_args_array_string(self, obj):
+        """
+        Return a string of (type, name) args, comma separated
+        for use in templates that generate prototypes.
+        """
+        arg_str = ""
+        contains_array = False
+        for (name, mtype, size, format, comment) in obj.get_members():
+            if isinstance(mtype, tuple):
+                arg_str += "{} {}, ".format(mtype[0][1], name)
+            elif mtype == "string":
+                arg_str += "const {}::{}String& {}, ".format(obj.get_name(), name, name)
+            elif mtype not in typelist:
+                arg_str += "const {}& {}, ".format(mtype, name)
+            elif size is not None:
+                arg_str += "const {} {}, ".format(mtype, name)
+                contains_array = True
+            else:
+                arg_str += "{} {}".format(mtype, name)
+                arg_str += ", "
+        if not contains_array:
+            return None
+        arg_str = arg_str.strip(", ")
+        return arg_str
+
 
     def _writeTmpl(self, c, visit_str):
         """
@@ -267,6 +294,7 @@ class SerialCppVisitor(AbstractVisitor.AbstractVisitor):
         c.args_string = self._get_args_string(obj)
         c.args_mstring = self._get_args_string(obj, "src.m_")
         c.args_mstring_ptr = self._get_args_string(obj, "src->m_")
+        c.args_array_string = self._get_args_array_string(obj)
         c.members = self._get_conv_mem_list(obj)
         self._writeTmpl(c, "publicVisit")
 

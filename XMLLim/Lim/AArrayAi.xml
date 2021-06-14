@@ -1,0 +1,11 @@
+<array name="A" namespace="XMLLim">
+  <import_serializable_type>SSerializableAi.xml</import_serializable_type>
+  <type>S</type>
+  <size>3</size>
+  <format>%s</format>
+  <default>
+    <value>S(0, 0.0)</value>
+    <value>S(0, 0.0)</value>
+    <value>S(0, 0.0)</value>
+  </default>
+</array>

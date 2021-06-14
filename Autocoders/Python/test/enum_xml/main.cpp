@@ -181,6 +181,7 @@ TEST(EnumXML, OK) {
     Example::Enum2 enum4;
 
     Example::Serial1 serial1;
+    Example::Serial1 serial2(0,0,Example::Enum1::Item2,0);
 
     // Check that other enums are set to default value
     ASSERT_EQ(enum1, enum2);
@@ -209,6 +210,8 @@ TEST(EnumXML, OK) {
     int serial_arg1 = 0;
 
     int serial_arg2 = 0;
+
+    int serial_arg3 = 0;
 
     // Serialize enums
     U8 buffer1[1024];
@@ -257,7 +260,7 @@ TEST(EnumXML, OK) {
     cout << "Deserialized enums" << endl;
 
     // Create serializable and test that enum is saved
-    serial1 = Example::Serial1(serial_arg1, serial_arg2, enum2);
+    serial1 = Example::Serial1(serial_arg1, serial_arg2, enum2, serial_arg3);
     ASSERT_EQ(serial1.getMember3(), enum2);
     cout << "Created serializable with enum arg" << endl;
 

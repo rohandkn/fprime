@@ -7,8 +7,8 @@
     <members>
         <member name="Member1" type="U32" comment = "Example member 1"/>
         <member name="Member2" type="U32" comment = "Example member 2"/>
-        <member name="Member3" type="Example::Enum1" comment = "Example enum member">
-        </member>
+        <member name="Member3" type="Example::Enum1" comment = "Example enum member"/>
+        <member name="Member4" type="U32" size="3" comment = "Example member 4"/>
     </members>
 </serializable>
 
