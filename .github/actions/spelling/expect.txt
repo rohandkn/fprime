@@ -319,6 +319,7 @@ CYCLEIN
 CYCLEOUT
 Cyg
 cygwin
+czf
 daringfireball
 Daruwala
 DASSERT
@@ -682,6 +683,7 @@ gtest
 GTestbase
 gui
 Guire
+gz
 handcoded
 hardtoaccess
 hasattr
@@ -1236,6 +1238,8 @@ preparse
 Prepends
 prepeneding
 pri
+PRId
+PRIu
 printables
 printf
 println
@@ -1555,6 +1559,7 @@ startword
 staticmethod
 statvfs
 stdarg
+STDC
 stddef
 stderr
 stdin

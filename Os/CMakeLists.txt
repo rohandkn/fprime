@@ -59,7 +59,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
     "${CMAKE_CURRENT_LIST_DIR}/MacOs/IPCQueueStub.cpp"
   )
 # Linux IPC queues implementation
-elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "arm-linux-gnueabihf")
+elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   list(APPEND SOURCE_FILES
     "${CMAKE_CURRENT_LIST_DIR}/Posix/IPCQueue.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/Posix/LocklessQueue.cpp"
@@ -97,8 +97,7 @@ set(UT_SOURCE_FILES
   "${CMAKE_CURRENT_LIST_DIR}/test/ut/OsTaskTest.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/test/ut/OsFileSystemTest.cpp"
 )
-## TODO: **BROKEN UT**, validation of File fails
-#register_fprime_ut()
+register_fprime_ut()
 
 # Second UT Pthreads
 set(UT_SOURCE_FILES
