@@ -5,7 +5,7 @@
         FileDownlink response to send file request
     </comment>
     <args>
-        <arg name="resp" type="Svc::SendFileResponse">
+        <arg name="resp" type="Svc::SendFileResponse" pass_by="value">
         </arg>
     </args>
 </interface>
