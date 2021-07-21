@@ -8,6 +8,8 @@ set(SOURCE_FILES
   "${CMAKE_CURRENT_LIST_DIR}/Component1ComponentAi.xml"
   "${CMAKE_CURRENT_LIST_DIR}/Port1PortAi.xml"
   "${CMAKE_CURRENT_LIST_DIR}/ExampleTypeSerializableAi.xml"
+  "${CMAKE_CURRENT_LIST_DIR}/Serial1SerializableAi.xml"
+  "${CMAKE_CURRENT_LIST_DIR}/ExampleType.cpp"
 )
 register_fprime_module()
 
