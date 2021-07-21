@@ -6,6 +6,7 @@
 # However, only the UT build is allowed here.
 set(SOURCE_FILES
   "${CMAKE_CURRENT_LIST_DIR}/Serial1SerializableAi.xml"
+  "${CMAKE_CURRENT_LIST_DIR}/ExampleType.cpp"
 )
 register_fprime_module()
 
