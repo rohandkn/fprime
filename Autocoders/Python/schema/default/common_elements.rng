@@ -16,7 +16,6 @@
         <a:documentation>Defines how the variable is being passed.</a:documentation>
         <choice>
             <value>reference</value>
-            <value>value</value>
             <value>pointer</value>
         </choice>
     </define>
@@ -282,12 +281,18 @@
                     <!-- Choice between 'type' and 'data_type'. This is to preserve compatibility with the telemetry channels -->
                     <attribute name="type">
                         <a:documentation>The type of data being passed through the argument.</a:documentation>
-                        <value>string</value>
+                        <choice>
+                            <value>string</value>
+                            <value>buffer</value>
+                        </choice>
                     </attribute>
 
                     <attribute name="data_type">
                         <a:documentation>The type of data being passed through the argument.</a:documentation>
-                        <value>string</value>
+                        <choice>
+                            <value>string</value>
+                            <value>buffer</value>
+                        </choice>
                     </attribute>
                 </choice>
 
@@ -295,6 +300,13 @@
                     <a:documentation>The size of the argument.</a:documentation>
                     <data type="nonNegativeInteger"/>
                 </attribute>
+
+                <optional>
+                    <attribute name="array_length">
+                        <a:documentation>The size of the argument.</a:documentation>
+                        <data type="nonNegativeInteger"/>
+                    </attribute>
+                </optional>
             </group>
 
             <!--Choice two: Type = ENUM and Enum element inside block -->
@@ -347,7 +359,7 @@
                 </choice>
 
                 <optional>
-                    <attribute name="size">
+                    <attribute name="array_length">
                         <a:documentation>The size of the argument.</a:documentation>
                         <data type="nonNegativeInteger"/>
                     </attribute>

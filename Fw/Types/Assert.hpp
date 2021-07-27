@@ -21,7 +21,7 @@
     ((void) ((cond) ? (0) : \
     (Fw::SwAssert(ASSERT_FILE_ID, __LINE__, ##__VA_ARGS__))))
 #else
-#define FILE_NAME_ARG U8*
+#define FILE_NAME_ARG const U8*
 #define FW_ASSERT(cond, ...) \
     ((void) ((cond) ? (0) : \
     (Fw::SwAssert((U8*)__FILE__, __LINE__, ##__VA_ARGS__))))
@@ -78,11 +78,11 @@ namespace Fw {
             virtual void printAssert(const I8* msg);
             // do assert action. By default, calls assert.
             // Called after reportAssert()
-            virtual void doAssert(void);
+            virtual void doAssert();
             // register the hook
-            void registerHook(void);
+            void registerHook();
             // deregister the hook
-            void deregisterHook(void);
+            void deregisterHook();
 
         protected:
         private:

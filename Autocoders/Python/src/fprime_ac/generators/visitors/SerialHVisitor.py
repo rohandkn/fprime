@@ -88,14 +88,17 @@ class SerialHVisitor(AbstractVisitor.AbstractVisitor):
         for use in templates that generate prototypes.
         """
         arg_str = ""
-        for (name, mtype, size, format, comment, default) in obj.get_members():
+        for (name, mtype, array_length, size, format, comment, default) in obj.get_members():
             if isinstance(mtype, tuple):
                 arg_str += "{} {}, ".format(mtype[0][1], name)
-            elif mtype == "string":
+            elif mtype == "string" and array_length is None:
                 arg_str += "const {}::{}String& {}, ".format(obj.get_name(), name, name)
+            elif mtype == "string" and array_length is not None:
+                arg_str += "const {}::{}String* {}, ".format(obj.get_name(), name, name)
+                arg_str += "NATIVE_INT_TYPE %sSize, " % (name)
             elif mtype not in typelist:
                 arg_str += "const {}& {}, ".format(mtype, name)
-            elif size is not None:
+            elif array_length is not None:
                 arg_str += "const {}* {}, ".format(mtype, name)
                 arg_str += "NATIVE_INT_TYPE %sSize, " % (name)
             else:
@@ -109,19 +112,22 @@ class SerialHVisitor(AbstractVisitor.AbstractVisitor):
         """
         Return a string of (type, name) args, comma separated
         where array arguments are represented by single element
-        values for use in templates that generate prototypes. 
+        values for use in templates that generate prototypes.
         If no arguments are arrays, function returns None.
         """
         arg_str = ""
         contains_array = False
-        for (name, mtype, size, format, comment) in obj.get_members():
+        for (name, mtype, array_length, size, format, comment) in obj.get_members():
             if isinstance(mtype, tuple):
                 arg_str += "{} {}, ".format(mtype[0][1], name)
-            elif mtype == "string":
+            elif mtype == "string" and array_length is None:
                 arg_str += "const {}::{}String& {}, ".format(obj.get_name(), name, name)
+            elif mtype == "string" and array_length is not None:
+                arg_str += "const {}::{}String& {}, ".format(obj.get_name(), name, name)
+                contains_array = True
             elif mtype not in typelist:
                 arg_str += "const {}& {}, ".format(mtype, name)
-            elif size is not None:
+            elif array_length is not None:
                 arg_str += "const {} {}, ".format(mtype, name)
                 contains_array = True
             else:
@@ -137,8 +143,8 @@ class SerialHVisitor(AbstractVisitor.AbstractVisitor):
         Return a list of port argument tuples
         """
         arg_list = list()
-
-        for (name, mtype, size, format, comment, default) in obj.get_members():
+        
+        for (name, mtype, array_length, size, format, comment) in obj.get_members():
             typeinfo = None
             if isinstance(mtype, tuple):
                 mtype = mtype[0][1]
@@ -149,8 +155,9 @@ class SerialHVisitor(AbstractVisitor.AbstractVisitor):
             elif mtype not in typelist:
                 typeinfo = "extern"
 
-            arg_list.append((name, mtype, size, format, comment, typeinfo))
-
+            arg_list.append(
+                (name, mtype, array_length, size, format, comment, typeinfo)
+            )
         return arg_list
 
     def _get_enum_string_list(self, enum_list):

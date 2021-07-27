@@ -85,7 +85,7 @@ namespace Svc {
   }
 
   FileDownlink ::
-    ~FileDownlink(void)
+    ~FileDownlink()
   {
 
   }
@@ -154,8 +154,8 @@ namespace Svc {
   Svc::SendFileResponse FileDownlink ::
     SendFile_handler(
         const NATIVE_INT_TYPE portNum,
-        sourceFileNameString sourceFilename, // lgtm[cpp/large-parameter] dictated by command architecture
-        destFileNameString destFilename, // lgtm[cpp/large-parameter] dictated by command architecture
+        const sourceFileNameString& sourceFilename, // lgtm[cpp/large-parameter] dictated by command architecture
+        const destFileNameString& destFilename, // lgtm[cpp/large-parameter] dictated by command architecture
         U32 offset,
         U32 length
     )
@@ -252,7 +252,7 @@ namespace Svc {
     Os::Queue::QueueStatus status = fileQueue.send((U8 *) &entry, sizeof(entry), 0, Os::Queue::QUEUE_NONBLOCKING);
 
     if(status != Os::Queue::QUEUE_OK) {
-      this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_EXECUTION_ERROR);
+      this->cmdResponse_out(opCode, cmdSeq, Fw::CmdResponse::EXECUTION_ERROR);
     }
   }
 
@@ -285,7 +285,7 @@ namespace Svc {
     Os::Queue::QueueStatus status = fileQueue.send((U8 *) &entry, sizeof(entry), 0, Os::Queue::QUEUE_NONBLOCKING);
 
     if(status != Os::Queue::QUEUE_OK) {
-      this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_EXECUTION_ERROR);
+      this->cmdResponse_out(opCode, cmdSeq, Fw::CmdResponse::EXECUTION_ERROR);
     }
   }
 
@@ -299,32 +299,32 @@ namespace Svc {
       if (this->mode.get() == Mode::DOWNLINK || this->mode.get() == Mode::WAIT) {
           this->mode.set(Mode::CANCEL);
       }
-      this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_OK);
+      this->cmdResponse_out(opCode, cmdSeq, Fw::CmdResponse::OK);
   }
 
   // ----------------------------------------------------------------------
   // Private helper methods
   // ----------------------------------------------------------------------
 
-  Fw::CommandResponse FileDownlink ::
+  Fw::CmdResponse FileDownlink ::
     statusToCmdResp(SendFileStatus status)
   {
     switch(status.e) {
     case SendFileStatus::OK:
-      return Fw::COMMAND_OK;
+      return Fw::CmdResponse::OK;
     case SendFileStatus::ERROR:
-      return Fw::COMMAND_EXECUTION_ERROR;
+      return Fw::CmdResponse::EXECUTION_ERROR;
     case SendFileStatus::INVALID:
-      return Fw::COMMAND_VALIDATION_ERROR;
+      return Fw::CmdResponse::VALIDATION_ERROR;
     case SendFileStatus::BUSY:
-        return Fw::COMMAND_BUSY;
+        return Fw::CmdResponse::BUSY;
     default:
         // Trigger assertion if given unknown status
         FW_ASSERT(false);
     }
 
     // It's impossible to reach this, but added to suppress gcc missing return warning
-    return Fw::COMMAND_EXECUTION_ERROR;
+    return Fw::CmdResponse::EXECUTION_ERROR;
   }
 
   void FileDownlink ::
@@ -433,7 +433,7 @@ namespace Svc {
   }
 
   void FileDownlink ::
-    sendCancelPacket(void)
+    sendCancelPacket()
   {
     Fw::Buffer buffer;
     const Fw::FilePacket::CancelPacket cancelPacket = {
@@ -451,7 +451,7 @@ namespace Svc {
   }
 
   void FileDownlink ::
-    sendEndPacket(void)
+    sendEndPacket()
   {
     const Fw::FilePacket::Header header = {
       Fw::FilePacket::T_END,
@@ -471,7 +471,7 @@ namespace Svc {
   }
 
   void FileDownlink ::
-    sendStartPacket(void)
+    sendStartPacket()
   {
     Fw::FilePacket::StartPacket startPacket;
     startPacket.initialize(
@@ -501,7 +501,7 @@ namespace Svc {
   }
 
   void FileDownlink ::
-    enterCooldown(void)
+    enterCooldown()
   {
     this->file.osFile.close();
     this->mode.set(Mode::COOLDOWN);
