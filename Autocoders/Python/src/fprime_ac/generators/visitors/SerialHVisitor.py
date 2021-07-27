@@ -158,6 +158,7 @@ class SerialHVisitor(AbstractVisitor.AbstractVisitor):
             arg_list.append(
                 (name, mtype, array_length, size, format, comment, typeinfo)
             )
+
         return arg_list
 
     def _get_enum_string_list(self, enum_list):
