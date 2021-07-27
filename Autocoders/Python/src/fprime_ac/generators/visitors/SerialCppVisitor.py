@@ -85,7 +85,8 @@ class SerialCppVisitor(AbstractVisitor.AbstractVisitor):
         for use in templates that generate prototypes.
         """
         arg_str = ""
-        for (name, mtype, array_length, size, format, comment) in obj.get_members():
+        
+        for (name, mtype, array_length, size, format, comment, default) in obj.get_members():
             if isinstance(mtype, tuple):
                 arg_str += "{} {}, ".format(mtype[0][1], name)
             elif mtype == "string" and array_length is None:
@@ -141,8 +142,8 @@ class SerialCppVisitor(AbstractVisitor.AbstractVisitor):
                 typeinfo = "string"
             elif mtype not in typelist:
                 typeinfo = "extern"
-
-            arg_list.append(
+                
+                arg_list.append(
                 (name, mtype, array_length, size, format, comment, typeinfo)
             )
         return arg_list
@@ -301,6 +302,7 @@ class SerialCppVisitor(AbstractVisitor.AbstractVisitor):
         c.args_string = self._get_args_string(obj)
         c.args_mstring = self._get_args_string(obj, "src.m_")
         c.args_mstring_ptr = self._get_args_string(obj, "src->m_")
+        c.args_scalar_array_string = self._get_args_proto_string_scalar_init(obj)
         c.members = self._get_conv_mem_list(obj)
         self._writeTmpl(c, "publicVisit")
 
